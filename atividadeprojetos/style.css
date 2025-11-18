@@ -1,0 +1,134 @@
+/* ===== Variáveis de Cores (Novas) ===== */
+:root {
+    /* Azuis */
+    --light-blue: #6bc2d1;
+    --dark-blue: #64b9c4;
+    --dark-blue-2: #5e9bc1;
+    
+    /* Verdes */
+    --green: #6ebe44;
+    --dark-green: #4c8c2e;
+    --light-green: #A1D27F;
+    
+    /* Neutras e Outras */
+    --beige: #d7d6a4;
+    --black: #000000;
+    --white: #ffffff;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== Corpo ===== */
+body {
+    font-family: "Poppins", sans-serif;
+    /* Alterado para usar a paleta do projeto (Azul claro e Azul escuro) */
+    background: linear-gradient(135deg, var(--dark-green), var(--dark-green)); 
+    color: var(--black); /* Usando preto para o texto principal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ===== Container principal ===== */
+.container {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    animation: fadeIn 0.8s ease;
+}
+
+.container h1 {
+    text-align: center;
+    /* Cor do título alterada para o Azul Escuro Principal */
+    color: var(--dark-blue-2);
+    margin-bottom: 10px;
+}
+
+.container p {
+    text-align: center;
+    /* Cor do texto descritivo alterada para um tom de cinza */
+    color: #555; 
+    margin-bottom: 25px;
+}
+
+/* ===== Formulário ===== */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--black); /* Mantendo o texto em preto */
+}
+
+.contact-form input,
+.contact-form textarea {
+    border: 1px solid var(--beige); /* Borda inicial com dark-blue */
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    margin-bottom: 18px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    /* Foco alterado para o Verde Claro */
+    border-color: var(--light-green);
+    box-shadow: 0 0 5px rgba(161, 210, 127, 0.5); /* Sombra baseada no light-green */
+    outline: none;
+}
+
+/* ===== Botão ===== */
+.contact-form button {
+    /* Cor do botão alterada para o Verde Principal */
+    background-color: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+    /* Hover alterado para o Verde Escuro */
+    background-color: var(--dark-green);
+}
+
+/* ===== Animação ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 480px) {
+    .container {
+        padding: 25px;
+    }
+
+    .contact-form button {
+        font-size: 15px;
+    }
+}
