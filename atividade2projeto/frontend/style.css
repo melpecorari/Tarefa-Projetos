@@ -1,0 +1,108 @@
+/* style.css */
+
+/* Definição das cores base (baseadas na sua imagem) */
+:root {
+    --cor-fundo-principal: #519872; /* Verde mais escuro do fundo */
+    --cor-card: #b2d8b4;            /* Verde mais claro do container */
+    --cor-texto-principal: #333333;
+    --cor-botao-principal: #4285f4;  /* Azul do botão 'Entrar' */
+    --cor-botao-hover: #3367d6;
+    --cor-input-borda: #cccccc;
+    --cor-link: #007bff;            /* Azul para link 'Esqueceu sua senha?' */
+}
+
+/* 1. Estilos Base e Centralização */
+body {
+    background-color: var(--cor-fundo-principal);
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* 2. Estilo do Card (login-card ou container) */
+.login-container, .container {
+    max-width: 350px;
+    width: 90%; 
+    background-color: var(--cor-card);
+    padding: 30px;
+    border-radius: 15px; /* Bordas bem arredondadas, como na imagem */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 3. Estilos de Títulos e Labels */
+h2 {
+    text-align: center;
+    color: var(--cor-texto-principal);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+label {
+    font-weight: bold;
+    color: var(--cor-texto-principal);
+    margin-top: 5px;
+}
+
+/* 4. Estilos dos Inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    padding: 12px;
+    border: 1px solid var(--cor-input-borda);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: var(--cor-botao-principal);
+    outline: none; 
+    box-shadow: 0 0 5px rgba(66, 133, 244, 0.5); /* Sombra do foco azul */
+}
+
+/* 5. Estilo do Botão Principal (Entrar/Cadastrar) */
+.btn_login, #btn_acao, #btn_cadastro {
+    background-color: var(--cor-botao-principal);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; 
+}
+
+.btn_login:hover, #btn_acao:hover, #btn_cadastro:hover {
+    background-color: var(--cor-botao-hover);
+}
+
+/* 6. Estilo do Link "Esqueceu sua senha?" */
+.forgot, #alternar {
+    text-align: center;
+    font-size: 14px;
+    color: var(--cor-link);
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.forgot:hover, #alternar:hover {
+    text-decoration: underline;
+}
+
+/* 7. Estilo da Mensagem de Resultado */
+#resultado {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}

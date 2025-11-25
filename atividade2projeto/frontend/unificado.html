@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro e Login </title>
+    <link rel="stylesheet" href="style.css" /> 
+</head>
+<body>
+    <div class="container">
+        <h2 id="titulo">Cadastre-se</h2> 
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Seu e-mail" required />
+        
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="Sua senha (min. 6 caracteres)" required />
+        
+        <p id="resultado" style="font-weight: bold;"></p>
+
+        <button id="btn_acao">Cadastrar</button>
+
+        <p id="alternar">Já tem conta? Clique para Logar</p>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:3002"; 
+        
+        let isLoginMode = false; 
+
+        const titulo = document.getElementById('titulo');
+        const btnAcao = document.getElementById('btn_acao');
+        const alternarLink = document.getElementById('alternar');
+        const resultadoElement = document.getElementById('resultado');
+        const emailInput = document.getElementById('email');
+        const senhaInput = document.getElementById('senha');
+        
+        
+        function toggleMode() {
+            isLoginMode = !isLoginMode;
+            
+            titulo.innerText = isLoginMode ? 'LOGIN' : 'Cadastre-se';
+            btnAcao.innerText = isLoginMode ? 'Entrar' : 'Cadastrar';
+            alternarLink.innerText = isLoginMode 
+                ? 'Não tem conta? Clique para Cadastrar' 
+                : 'Já tem conta? Clique para Logar';
+            
+            
+            emailInput.value = '';
+            senhaInput.value = '';
+            resultadoElement.innerText = '';
+        }
+        
+        
+        toggleMode(); 
+        
+        
+        async function handleSubmit() {
+            const email = emailInput.value;
+            const senha = senhaInput.value;
+            
+            resultadoElement.innerText = "";
+            resultadoElement.style.color = "red";
+
+            if (!email || !senha) {
+                resultadoElement.innerText = "Preencha e-mail e senha.";
+                return;
+            }
+
+            
+            const endpoint = isLoginMode ? '/login' : '/cadastrar';
+            
+            try {
+                const resposta = await fetch(`${API_URL}${endpoint}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
+
+                const dados = await resposta.json();
+                resultadoElement.innerText = dados.mensagem;
+
+                if (resposta.ok) {
+                    resultadoElement.style.color = "green";
+                    if (!isLoginMode) {
+                        toggleMode(); 
+                        resultadoElement.innerText = "Cadastro realizado com sucesso! Faça seu Login.";
+                    } else {
+                        
+                    }
+                } else {
+                    resultadoElement.style.color = "red";
+                }
+            } catch (error) {
+                resultadoElement.innerText = "Erro de Conexão: O servidor está offline ou inacessível.";
+                resultadoElement.style.color = "darkred";
+                console.error("Erro na requisição Fetch:", error);
+            }
+        }
+
+        btnAcao.addEventListener('click', handleSubmit);
+        alternarLink.addEventListener('click', toggleMode);
+    </script>
+</body>
+</html>

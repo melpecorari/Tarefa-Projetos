@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="style.css" /> 
+</head>
+<body>
+    <div class="container"> 
+        <h2>Cadastre-se</h2>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Seu e-mail" required />
+        
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="Sua senha (mínimo 6 caracteres)" required />
+        
+        <p id="resultado" style="font-weight: bold;"></p>
+
+        <button id="btn_cadastro">Cadastrar</button>
+
+        <p id="info">Após o cadastro, você precisará fazer login.</p>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:3002"; // Porta do backend
+        const btnCadastro = document.getElementById('btn_cadastro');
+        const emailInput = document.getElementById('email');
+        const senhaInput = document.getElementById('senha');
+        const resultadoElement = document.getElementById('resultado');
+        
+        async function handleCadastro() {
+            const email = emailInput.value;
+            const senha = senhaInput.value;
+            
+            resultadoElement.innerText = ""; // Limpa a mensagem
+            
+            // Validação simples do frontend
+            if (!email || !senha) {
+                resultadoElement.innerText = "Preencha e-mail e senha.";
+                resultadoElement.style.color = "red";
+                return;
+            }
+
+            try {
+                // Requisição para a rota de cadastro no backend
+                const resposta = await fetch(`${API_URL}/cadastrar`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    // O backend espera {email: "...", senha: "..."}
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
+
+                const dados = await resposta.json();
+                resultadoElement.innerText = dados.mensagem;
+
+                if (resposta.ok) {
+                    // Status 201 (Created) ou 200: Sucesso
+                    resultadoElement.style.color = "green";
+                    // Limpa os campos após o sucesso
+                    emailInput.value = '';
+                    senhaInput.value = '';
+                } else {
+                    // Erro 400, 409 (Conflito/email já existe), 500 etc.
+                    resultadoElement.style.color = "red";
+                }
+            } catch (error) {
+                resultadoElement.innerText = "Erro de Conexão: O servidor está offline.";
+                resultadoElement.style.color = "darkred";
+                console.error("Erro na requisição Fetch:", error);
+            }
+        }
+
+        btnCadastro.addEventListener('click', handleCadastro);
+    </script>
+</body>
+</html>
