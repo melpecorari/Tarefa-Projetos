@@ -3,103 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro e Login </title>
-    <link rel="stylesheet" href="style.css" /> 
+    <title>Sistema Unificado (Cadastro/Login e Contato)</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        
+       
+        .tab-menu {
+            display: none; 
+        }
+        
+       
+        .fale-conosco-link, .voltar-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .fale-conosco-link a, .voltar-link a {
+            color: var(--cor-link);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .fale-conosco-link a:hover, .voltar-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2 id="titulo">Cadastre-se</h2> 
         
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Seu e-mail" required />
-        
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" placeholder="Sua senha (min. 6 caracteres)" required />
-        
-        <p id="resultado" style="font-weight: bold;"></p>
+        <div id="auth-section" class="content-section active">
+            <h2 id="titulo">Cadastre-se</h2>
 
-        <button id="btn_acao">Cadastrar</button>
+            <label for="email_auth">Email</label>
+            <input type="email" id="email_auth" placeholder="Seu e-mail" required />
 
-        <p id="alternar">Já tem conta? Clique para Logar</p>
+            <label for="senha_auth">Senha</label>
+            <input type="password" id="senha_auth" placeholder="Sua senha (min. 6 caracteres)" required />
+
+            <p id="resultado_auth" style="font-weight: bold;"></p>
+
+            <button id="btn_acao">Cadastrar</button>
+
+            <p id="alternar">Já tem conta? Clique para Logar</p>
+            
+            <p class="fale-conosco-link">
+                <a id="link_para_contato" href="#">Precisa de Ajuda? Fale Conosco</a>
+            </p>
+            
+        </div>
+
+        <div id="contact-section" class="content-section">
+            <h1>Fale Conosco</h1>
+            <p>Envie o seu contato para mais informações!</p>
+
+            <form class="contact-form">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" placeholder="seu nome completo" required />
+
+                <label for="email_contact">E-mail</label>
+                <input type="email" id="email_contact" name="email_contact" placeholder="seuemail@exemplo.com" required />
+
+                <label for="telefone">Telefone</label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(18)0000-0000" required />
+
+                <label for="mensagem">Mensagem</label>
+                <textarea id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem aqui..." required></textarea>
+
+                <label for="assunto">Assunto</label>
+                <input type="text" id="assunto" name="assunto" placeholder="Digite qual o assunto aqui..." required />
+
+                <button id="btn_enviar">Enviar Contato</button>
+                <p id="resultado_contact" style="font-weight: bold;"></p>
+            </form>
+
+            <p class="voltar-link">
+                <a id="link_para_auth" href="#">Voltar para Cadastro/Login</a>
+            </p>
+        </div>
     </div>
 
     <script>
-        const API_URL = "http://localhost:3002"; 
-        
-        let isLoginMode = false; 
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_URL = "http://localhost:3002";
+            let isLoginMode = false;
 
-        const titulo = document.getElementById('titulo');
-        const btnAcao = document.getElementById('btn_acao');
-        const alternarLink = document.getElementById('alternar');
-        const resultadoElement = document.getElementById('resultado');
-        const emailInput = document.getElementById('email');
-        const senhaInput = document.getElementById('senha');
-        
-        
-        function toggleMode() {
-            isLoginMode = !isLoginMode;
+            const authSection = document.getElementById('auth-section');
+            const titulo = document.getElementById('titulo');
+            const btnAcao = document.getElementById('btn_acao');
+            const alternarLink = document.getElementById('alternar');
+            const resultadoAuthElement = document.getElementById('resultado_auth');
+            const emailAuthInput = document.getElementById('email_auth');
+            const senhaAuthInput = document.getElementById('senha_auth');
             
-            titulo.innerText = isLoginMode ? 'LOGIN' : 'Cadastre-se';
-            btnAcao.innerText = isLoginMode ? 'Entrar' : 'Cadastrar';
-            alternarLink.innerText = isLoginMode 
-                ? 'Não tem conta? Clique para Cadastrar' 
-                : 'Já tem conta? Clique para Logar';
-            
-            
-            emailInput.value = '';
-            senhaInput.value = '';
-            resultadoElement.innerText = '';
-        }
-        
-        
-        toggleMode(); 
-        
-        
-        async function handleSubmit() {
-            const email = emailInput.value;
-            const senha = senhaInput.value;
-            
-            resultadoElement.innerText = "";
-            resultadoElement.style.color = "red";
+           
+            const contactSection = document.getElementById('contact-section');
+            const btnEnviar = document.getElementById("btn_enviar");
+            const resultadoContactElement = document.getElementById("resultado_contact");
+            const linkParaContato = document.getElementById('link_para_contato');
+            const linkParaAuth = document.getElementById('link_para_auth');
 
-            if (!email || !senha) {
-                resultadoElement.innerText = "Preencha e-mail e senha.";
-                return;
-            }
 
-            
-            const endpoint = isLoginMode ? '/login' : '/cadastrar';
-            
-            try {
-                const resposta = await fetch(`${API_URL}${endpoint}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email: email, senha: senha })
-                });
-
-                const dados = await resposta.json();
-                resultadoElement.innerText = dados.mensagem;
-
-                if (resposta.ok) {
-                    resultadoElement.style.color = "green";
-                    if (!isLoginMode) {
-                        toggleMode(); 
-                        resultadoElement.innerText = "Cadastro realizado com sucesso! Faça seu Login.";
-                    } else {
-                        
-                    }
-                } else {
-                    resultadoElement.style.color = "red";
+            function showSection(sectionId) {
+                if (sectionId === 'contact') {
+                    authSection.classList.remove('active');
+                    contactSection.classList.add('active');
+                } else { 
+                    contactSection.classList.remove('active');
+                    authSection.classList.add('active');
                 }
-            } catch (error) {
-                resultadoElement.innerText = "Erro de Conexão: O servidor está offline ou inacessível.";
-                resultadoElement.style.color = "darkred";
-                console.error("Erro na requisição Fetch:", error);
             }
-        }
 
-        btnAcao.addEventListener('click', handleSubmit);
-        alternarLink.addEventListener('click', toggleMode);
+
+            
+            function toggleMode() {
+                isLoginMode = !isLoginMode;
+                titulo.innerText = isLoginMode ? 'LOGIN' : 'Cadastre-se';
+                btnAcao.innerText = isLoginMode ? 'Entrar' : 'Cadastrar';
+                alternarLink.innerText = isLoginMode
+                    ? 'Não tem conta? Clique para Cadastrar'
+                    : 'Já tem conta? Clique para Logar';
+                emailAuthInput.value = '';
+                senhaAuthInput.value = '';
+                resultadoAuthElement.innerText = '';
+            }
+
+            async function handleSubmitAuth() {
+                const email = emailAuthInput.value;
+                const senha = senhaAuthInput.value;
+                
+                resultadoAuthElement.innerText = "";
+                resultadoAuthElement.style.color = "red";
+
+                if (!email || !senha) {
+                    resultadoAuthElement.innerText = "Preencha e-mail e senha.";
+                    return;
+                }
+
+                const endpoint = isLoginMode ? '/login' : '/cadastrar';
+
+                try {
+                    const resposta = await fetch(`${API_URL}${endpoint}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: email, senha: senha })
+                    });
+
+                    const dados = await resposta.json();
+                    resultadoAuthElement.innerText = dados.mensagem;
+
+                    if (resposta.ok) {
+                        resultadoAuthElement.style.color = "green";
+                        if (!isLoginMode) {
+                            toggleMode();
+                            resultadoAuthElement.innerText = "Cadastro realizado com sucesso! Faça seu Login.";
+                        }
+                    } else {
+                        resultadoAuthElement.style.color = "red";
+                    }
+                } catch (error) {
+                    resultadoAuthElement.innerText = "Erro de Conexão: O servidor está offline ou inacessível.";
+                    resultadoAuthElement.style.color = "darkred";
+                    console.error("Erro na requisição Fetch (Auth):", error);
+                }
+            }
+
+            
+            toggleMode(); 
+            btnAcao.addEventListener('click', handleSubmitAuth);
+            alternarLink.addEventListener('click', toggleMode);
+
+            
+            linkParaContato.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                showSection('contact'); 
+            });
+            
+            linkParaAuth.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                showSection('auth'); 
+            });
+
+
+            async function handleSubmitContact(e) {
+                e.preventDefault();
+
+                const nome = document.getElementById("nome").value;
+                const email = document.getElementById("email_contact").value;
+                const assunto = document.getElementById("assunto").value;
+                const mensagem = document.getElementById("mensagem").value;
+                const telefone = document.getElementById("telefone").value;
+                const form = document.querySelector('.contact-form');
+                
+                resultadoContactElement.innerText = ""; 
+
+                if (!nome || !email || !assunto || !mensagem) {
+                    resultadoContactElement.innerText = "Por favor, preencha nome, e-mail, assunto e mensagem.";
+                    resultadoContactElement.style.color = "red";
+                    return;
+                }
+                
+                try {
+                    const resposta = await fetch(`${API_URL}/contatos`, {
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ nome, email, telefone, assunto, mensagem })
+                    });
+
+                    if (resposta.ok) {
+                        const dados = await resposta.json();
+                        resultadoContactElement.innerText = dados.mensagem || "Contato enviado com sucesso!";
+                        resultadoContactElement.style.color = "green";
+                        form.reset(); 
+                    } else {
+                        const dados = await resposta.json();
+                        resultadoContactElement.innerText = `Erro (${resposta.status}): ${dados.mensagem || "Falha ao processar requisição."}`;
+                        resultadoContactElement.style.color = "red";
+                    }
+                } catch (error) {
+                    resultadoContactElement.innerText = "Erro de Conexão: O servidor está offline ou inacessível.";
+                    resultadoContactElement.style.color = "darkred";
+                    console.error("Erro na requisição Fetch (Contact):", error);
+                }
+            }
+
+            // Atribuição de Eventos Contact
+            btnEnviar.addEventListener("click", handleSubmitContact);
+        });
     </script>
 </body>
 </html>

@@ -2,13 +2,14 @@
 
 /* Definição das cores base (baseadas na sua imagem) */
 :root {
-    --cor-fundo-principal: #519872; /* Verde mais escuro do fundo */
-    --cor-card: #b2d8b4;            /* Verde mais claro do container */
-    --cor-texto-principal: #333333;
-    --cor-botao-principal: #4285f4;  /* Azul do botão 'Entrar' */
-    --cor-botao-hover: #3367d6;
-    --cor-input-borda: #cccccc;
-    --cor-link: #007bff;            /* Azul para link 'Esqueceu sua senha?' */
+    --cor-fundo-principal: #519872;      /* Verde mais escuro do fundo */
+    --cor-card: #FFFFFF;                 /* Fundo branco do container, como na imagem */
+    --cor-texto-principal: #333333;      /* Texto geral */
+    --cor-botao-principal: #4285f4;      /* Azul do botão principal 'Cadastrar/Entrar' */
+    --cor-botao-hover: #3367d6;          /* Azul mais escuro no hover */
+    --cor-input-borda: #cccccc;          /* Borda dos inputs */
+    --cor-link: #007bff;                 /* Azul para links 'Já tem conta?' */
+    --cor-aba-inativa: #666666;          /* Cor do texto da aba não selecionada */
 }
 
 /* 1. Estilos Base e Centralização */
@@ -20,89 +21,164 @@ body {
     align-items: center;     /* Centraliza verticalmente */
     min-height: 100vh;
     font-family: Arial, sans-serif;
+    color: var(--cor-texto-principal);
 }
 
-/* 2. Estilo do Card (login-card ou container) */
-.login-container, .container {
-    max-width: 350px;
+/* 2. Estilo do Card (container principal) */
+.container {
+    max-width: 400px; /* Um pouco mais largo para acomodar o menu de abas */
     width: 90%; 
     background-color: var(--cor-card);
     padding: 30px;
-    border-radius: 15px; /* Bordas bem arredondadas, como na imagem */
+    border-radius: 15px; /* Bordas arredondadas, como na imagem */
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 15px; /* Espaçamento padrão entre os elementos */
 }
 
-/* 3. Estilos de Títulos e Labels */
-h2 {
+/* 3. Estilo do Menu de Abas (tab-menu) */
+.tab-menu {
+    display: flex;
+    justify-content: space-around; /* Distribui os botões uniformemente */
+    margin-bottom: 25px; /* Espaço entre o menu de abas e o conteúdo */
+    border-bottom: 1px solid #eeeeee; /* Linha sutil abaixo do menu */
+    padding-bottom: 10px; /* Espaço entre a linha e os botões */
+}
+
+.tab-button {
+    background-color: transparent;
+    border: none;
+    padding: 8px 0px; /* Ajuste o padding para ficar mais compacto */
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em; /* Tamanho da fonte dos botões de aba */
+    color: var(--cor-aba-inativa); /* Cor do texto da aba não selecionada */
+    position: relative; /* Para a linha azul de baixo */
+    transition: color 0.3s ease;
+}
+
+.tab-button:hover {
+    color: var(--cor-botao-principal); /* Cor do texto no hover */
+}
+
+.tab-button.active {
+    color: var(--cor-botao-principal); /* Cor do texto da aba ativa */
+}
+
+/* Linha azul abaixo do botão de aba ativo */
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -11px; /* Ajusta a posição da linha abaixo do texto */
+    height: 3px; /* Espessura da linha */
+    background-color: var(--cor-botao-principal);
+    border-radius: 1.5px; /* Borda levemente arredondada para a linha */
+}
+
+
+/* 4. Estilos de Títulos e Labels */
+h1 { /* Título principal do Fale Conosco */
     text-align: center;
     color: var(--cor-texto-principal);
     margin-bottom: 10px;
+    font-size: 1.8em;
+}
+
+h2 { /* Título do Cadastro/Login */
+    text-align: center;
+    color: var(--cor-texto-principal);
+    margin-bottom: 15px; /* Mais espaço para o h2 */
     text-transform: uppercase;
+    font-size: 2em; /* Tamanho do "CADASTRE-SE" */
 }
 
 label {
     font-weight: bold;
     color: var(--cor-texto-principal);
-    margin-top: 5px;
+    margin-top: 5px; /* Pequeno espaçamento acima da label */
+    margin-bottom: 3px; /* Pequeno espaçamento entre label e input */
+    display: block; /* Garante que a label ocupe sua própria linha */
 }
 
-/* 4. Estilos dos Inputs */
+/* 5. Estilos dos Inputs (campos de texto e senha) */
 input[type="text"],
+input[type="email"],
 input[type="password"],
-input[type="email"] {
+input[type="tel"], /* Adicionado para o telefone */
+textarea { /* Adicionado para as textareas do Fale Conosco */
     padding: 12px;
     border: 1px solid var(--cor-input-borda);
     border-radius: 6px;
     font-size: 16px;
+    width: calc(100% - 24px); /* Ocupa 100% menos o padding */
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
     transition: border-color 0.3s;
+    margin-bottom: 10px; /* Espaçamento abaixo dos inputs */
 }
 
-input:focus {
+input:focus,
+textarea:focus {
     border-color: var(--cor-botao-principal);
     outline: none; 
-    box-shadow: 0 0 5px rgba(66, 133, 244, 0.5); /* Sombra do foco azul */
+    box-shadow: 0 0 5px rgba(66, 133, 244, 0.3); /* Sombra do foco azul */
 }
 
-/* 5. Estilo do Botão Principal (Entrar/Cadastrar) */
-.btn_login, #btn_acao, #btn_cadastro {
+/* 6. Estilo do Botão Principal (Cadastrar/Entrar/Enviar) */
+button { /* Estilo geral para todos os botões, incluindo os de ação */
     background-color: var(--cor-botao-principal);
     color: white;
-    padding: 12px;
+    padding: 12px 20px;
     border: none;
     border-radius: 6px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px; 
+    width: 100%; /* Ocupa a largura total do container */
+    margin-top: 10px; /* Espaçamento acima do botão */
 }
 
-.btn_login:hover, #btn_acao:hover, #btn_cadastro:hover {
+button:hover {
     background-color: var(--cor-botao-hover);
 }
 
-/* 6. Estilo do Link "Esqueceu sua senha?" */
-.forgot, #alternar {
+/* 7. Estilo de Links (Já tem conta? Clique para Logar) */
+#alternar, .fale-conosco-link p, .fale-conosco-link a {
     text-align: center;
     font-size: 14px;
     color: var(--cor-link);
     text-decoration: none;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
-.forgot:hover, #alternar:hover {
+#alternar:hover, .fale-conosco-link a:hover {
     text-decoration: underline;
 }
 
-/* 7. Estilo da Mensagem de Resultado */
-#resultado {
+/* 8. Estilo das Mensagens de Resultado */
+#resultado_auth, #resultado_contact {
     text-align: center;
     font-weight: bold;
     margin-top: 10px;
     padding: 5px;
     border-radius: 4px;
+    min-height: 20px; /* Para manter o layout estável mesmo sem mensagem */
+}
+
+/* 9. Estilo para as seções de conteúdo (display none/block) */
+.content-section {
+    /* Por padrão, não há display aqui, ele é controlado pelo JS */
+    /* Garante que o espaçamento interno do container funcione */
+    padding-top: 5px; /* Pequeno ajuste para o conteúdo abaixo das abas */
+}
+
+.content-section:not(.active) {
+    display: none;
+}
+.content-section.active {
+    display: block;
 }
